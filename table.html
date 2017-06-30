@@ -1,0 +1,664 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script src="<%= request.getContextPath()%>/js/angular.1.4.6.min.js"></script>
+<script src="<%= request.getContextPath()%>/js/jquery.js"></script>
+<script src="<%= request.getContextPath()%>/js/bootstrap.3.3.7.min.js"></script>
+<script src="<%= request.getContextPath()%>/js/jquery.toaster.js"></script>
+<script type="text/javascript" src="<%= request.getContextPath()%>/js/moment.min.js"></script>
+<script type="text/javascript" src="<%= request.getContextPath()%>/js/daterangepicker.js"></script>
+<script type="text/javascript" src="<%= request.getContextPath()%>/js/dateformat.js"></script>
+<link rel="stylesheet" type="text/css" href="<%= request.getContextPath()%>/css/daterangepicker.css" />
+<link rel="stylesheet" href="<%= request.getContextPath()%>/css/bootstrap.3.3.4.min.css">
+<link rel="stylesheet" href="<%= request.getContextPath()%>/css/bss.css" type="text/css">
+
+<style>
+
+table.bookingRecords{
+  width: 100%;
+  table-layout: fixed;
+}
+
+table.bookingRecords td{
+  word-wrap: break-word;
+}
+
+th.col-sm {
+  width: 60px;
+}
+
+th.col-md {
+  width: 120px;
+}
+
+th.col-lg {
+  width: 150px;
+}
+
+th.col-llg {
+  width: 300px;
+}
+
+td.td-serverType {width: 300px;}
+
+td.serverType {
+  width: 120px;
+}
+
+td.serverList {
+  width: 250px;
+}
+
+table.in-tbl{
+  width: 100%;
+}
+
+</style>
+
+<title>Booking Server System</title>
+</head>
+<body ng-app="myServersApp" ng-controller="myServerCtrl">
+
+<div class="container">
+
+  <%@ include file="UserHead.html" %>
+  
+  <div class="row clearfix">
+    <div class="col-md-2 column">
+      <%@ include file="UserNavigator.html" %>
+    </div>
+    <div class="col-md-10 column">
+      <div class="row clearfix">
+        <div class="col-md-12 column">
+          <table class="table table-striped bookingRecords">
+            <thead>
+              <tr>
+                <th class="col-sm"><span ng-bind="tableCols[0]"></span></th>
+                <th class="col-md"><span ng-bind="tableCols[1]"></span></th>
+                <th class="col-llg"><span ng-bind="tableCols[2]"></span></th>
+                <th class="col-lg"><span ng-bind="tableCols[3]"></span></th>
+                <th class="col-lg"><span ng-bind="tableCols[4]"></span></th>
+                <th class="col-llg"><span ng-bind="tableCols[5]"></span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-if="tableLines.length == 0">
+                <td colspan="6">You don't have any server now.</td>
+              </tr>
+              <tr ng-repeat="line in tableLines">
+                <td>
+                  <span ng-bind="line.id"></span>
+                </td>
+                <td>
+                  <span ng-bind="line.project"></span>
+                </td>
+                <td>
+                  <table class="in-tbl">
+                    <tr ng-repeat="server in line.serverTypes.servers | orderBy: sortByAlias">
+                      <td><span ng-bind="server.serverType"></td>
+                      <td class="startTime"><span ng-bind="server.startTime"></span></td>
+                      <td class="endTime"><span ng-bind="server.endTime"></span></td>
+                      <td class="comments"><span ng-bind="server.comments"></span></td>
+                    </tr>
+                    <tr ng-if="line.lbvips.length != 0">
+                      <td class="serverType">LB VIP</td>
+                      <td><span ng-bind="lbvip.url"></span></td>
+                      <td class="startTime"><span ng-bind="lbvip.startTime"></span></td>
+                      <td class="endTime"><span ng-bind="lbvip.endTime"></span></td>
+                      <td class="comments"><span ng-bind="lbvip.comments"></span></td>
+                    </tr>
+                    <tr ng-if="line.instances.length != 0;">
+                      <td>
+                        <hr>
+                        <table class="in-tbl">
+                          <tr>
+                            <td class="serverType">Instance</td>
+                            <td class="serverList">
+                              <table class="in-tbl">
+                                <tr ng-repeat="instance in line.instances">
+                                  <td><span ng-bind="instance.name"></span></td>
+                                </tr>
+                              </table>
+                            </td>
+                            <td><span ng-bind="instance.startTime"></span></td>
+                            <td><span ng-bind="instance.endTime"></span></td>
+                            <td><span ng-bind="instance.comments"></span></td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              <!-- code change start  -->
+                <td>
+                  <table class="in-tbl">
+                    <tr ng-repeat="serverType in line.serverTypes | orderBy: sortByServerType">
+                      <td>
+                        <hr ng-if="$index != 0;">
+                        <table class="in-tbl">
+                          <tr>
+                            <td class="serverList">
+                              <table class="in-tbl">
+                                <tr ng-repeat="server in serverType.servers">
+                                  <td><span ng-bind="server.startTime"></span></td>
+                                </tr>
+                              </table>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                    <tr ng-if="line.lbvips.length != 0">
+                      <td>
+                        <hr>
+                        <table class="in-tbl">
+                          <tr>
+                            <td class="serverList">
+                              <table class="in-tbl">
+                                <tr ng-repeat="lbvip in line.lbvips">
+                                  <td><span ng-bind="lbvip.startTime"></span></td>
+                                </tr>
+                              </table>
+                            </td>
+                            
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                    <tr ng-if="line.instances.length != 0;">
+                      <td>
+                        <hr>
+                        <table class="in-tbl">
+                          <tr>
+                            <td class="serverList">
+                              <table class="in-tbl">
+                                <tr ng-repeat="instance in line.instances">
+                                  <td><span ng-bind="instance.startTime"></span></td>
+                                </tr>
+                              </table>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+                <td>
+                  <table class="in-tbl">
+                    <tr ng-repeat="serverType in line.serverTypes | orderBy: sortByServerType">
+                      <td>
+                        <hr ng-if="$index != 0;">
+                        <table class="in-tbl">
+                          <tr>
+                            <td class="serverList">
+                              <table class="in-tbl">
+                                <tr ng-repeat="server in serverType.servers">
+                                  <td><span ng-bind="server.endTime"></span></td>
+                                </tr>
+                              </table>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                    <tr ng-if="line.lbvips.length != 0">
+                      <td>
+                        <hr>
+                        <table class="in-tbl">
+                          <tr>
+                            <td class="serverList">
+                              <table class="in-tbl">
+                                <tr ng-repeat="lbvip in line.lbvips">
+                                  <td><span ng-bind="lbvip.endTime"></span></td>
+                                </tr>
+                              </table>
+                            </td>
+                            
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                    <tr ng-if="line.instances.length != 0;">
+                      <td>
+                        <hr>
+                        <table class="in-tbl">
+                          <tr>
+                            <td class="serverList">
+                              <table class="in-tbl">
+                                <tr ng-repeat="instance in line.instances">
+                                  <td><span ng-bind="instance.endTime"></span></td>
+                                </tr>
+                              </table>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+                <td>
+                  <table class="in-tbl">
+                    <tr ng-repeat="serverType in line.serverTypes | orderBy: sortByServerType">
+                      <td>
+                        <hr ng-if="$index != 0;">
+                        <table class="in-tbl">
+                          <tr>
+                            <td class="serverList">
+                              <table class="in-tbl">
+                                <tr ng-repeat="server in serverType.servers">
+                                  <td><span ng-bind="server.comments"></span></td>
+                                </tr>
+                              </table>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                    <tr ng-if="line.lbvips.length != 0">
+                      <td>
+                        <hr>
+                        <table class="in-tbl">
+                          <tr>
+                            <td class="serverList">
+                              <table class="in-tbl">
+                                <tr ng-repeat="lbvip in line.lbvips">
+                                  <td><span ng-bind="lbvip.comments"></span></td>
+                                </tr>
+                              </table>
+                            </td>
+                            
+                          </tr>
+                          <tr>
+                            <td>aaaaaaa</td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                    <tr ng-if="line.instances.length != 0;">
+                      <td>
+                        <hr>
+                        <table class="in-tbl">
+                          <tr>
+                            <td class="serverList">
+                              <table class="in-tbl">
+                                <tr ng-repeat="instance in line.instances">
+                                  <td><span ng-bind="instance.comments"></span></td>
+                                </tr>
+                              </table>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+               <!-- code change start  -->
+                <td class="col-icon">
+                  <button class="btn" ng-click="extend(line)">
+                          <span class="glyphicon"></span>Extend
+                      </button>
+                      <br>
+                      <br>
+                      <button class="btn" ng-click="returnServers(line)">
+                          <span class="glyphicon"></span>Return
+                      </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+  <div class="modal fade" id="extendBookingTimeModal" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+            &times;
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row clearfix">
+            <div class="col-md-12 column">
+              <form class="form-horizontal" role="form">
+                <div class="form-group">
+                  <label class="col-sm-3 control-label" for="fs_daterange">Current Booking Time</label>
+                  <div class="col-sm-5">
+                    <input class="form-control" ng-model="modal_current_booking_time" readonly="readonly" type="text"/>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-3 control-label" for="fs_daterange">Extend To</label>
+                  <div class="col-sm-3">
+                    <input class="form-control" name="daterangepicker" id="daterangepicker" type="text"/>
+                  </div>
+                  <label class="col-sm-4 control-label" style="text-align: left">latest time: <span ng-bind="latestExtendTime"></span></label>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="row clearfix">
+            <div class="col-md-12 column">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th ng-repeat="col in bookingDetailTableCols"><span ng-bind="col"></span></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-if="bookingDetailTableLines == null || bookingDetailTableLines.length == 0">
+                    <td colspan="5">
+                      No server booked.
+                    </td>
+                  </tr>
+                  <tr ng-repeat="line in bookingDetailTableLines">
+                    <td>
+                      <span ng-bind="line.serverId"></span>
+                    </td>
+                    <td>
+                      <span ng-bind="line.alias"></span>
+                    </td>
+                    <td>
+                      <span ng-bind="line.serverType"></span>
+                    </td>
+                    <td>
+                      <span ng-bind="line.nextUser == null ? '-' : line.nextUser.fullname"></span>
+                    </td>
+                    <td>
+                      <span ng-bind="line.nextStartTime + '-' + line.nextEndTime"></span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th ng-repeat="col in bookingDetailLbvipTableCols"><span ng-bind="col"></span></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-if="bookingDetailLbvipTableLines == null || bookingDetailLbvipTableLines.length == 0">
+                    <td colspan="5">No load balance virtual ip</td>
+                  </tr>
+                  <tr ng-repeat="line in bookingDetailLbvipTableLines">
+                    <td>
+                      <span ng-bind="line.lbvipId"></span>
+                    </td>
+                    <td>
+                      <span ng-bind="line.url"></span>
+                    </td>
+                    <td>
+                      <span ng-bind="line.ip"></span>
+                    </td>
+                    <td>
+                      <span ng-bind="line.nextUser == null ? '-' : line.nextUser.fullname"></span>
+                    </td>
+                    <td>
+                      <span ng-bind="line.nextStartTime + '-' + line.nextEndTime"></span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th ng-repeat="col in bookingDetailInstanceTableCols"><span ng-bind="col"></span></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-if="bookingDetailInstanceTableLines == null || bookingDetailInstanceTableLines.length == 0">
+                    <td colspan="5">no instance</td>
+                  </tr>
+                  <tr ng-repeat="line in bookingDetailInstanceTableLines">
+                    <td>
+                      <span ng-bind="line.instanceId"></span>
+                    </td>
+                    <td>
+                      <span ng-bind="line.name"></span>
+                    </td>
+                    <td>
+                      <span ng-bind="line.dbServer"></span>
+                    </td>
+                    <td>
+                      <span ng-bind="line.nextUser == null ? '-' : line.nextUser.fullname"></span>
+                    </td>
+                    <td>
+                      <span ng-bind="line.nextStartTime + '-' + line.nextEndTime"></span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">
+            Close
+          </button>
+          <button type="button" class="btn btn-primary" ng-click="submitExtend()">
+            Submit
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <%@ include file="../common/showMessage.html" %>
+
+</div>
+
+
+<script>
+  currentPage("user_my_servers");
+  $("#daterangepicker").daterangepicker({
+    singleDatePicker: true,
+    timePicker: true,
+    timePicker24Hour: true,
+    timePickerIncrement: 1,
+    timePickerSeconds: true,
+    minDate: (new Date()).Format("yyyy/MM/dd"),
+    locale: {
+      format: "YYYY/MM/DD HH:mm:ss"
+    }
+  });
+  var drp = $("#daterangepicker").data("daterangepicker");
+  
+  var app = angular.module("myServersApp", []);
+  app.controller("myServerCtrl", function($scope, $http, $q){
+
+    $scope.sortByServerType = function(serverType) {
+      switch(serverType.type.toLowerCase()){
+      case 'cf app':
+        return 1;
+      case 'cf web':
+        return 2;
+      case 'career app':
+        return 3;
+      case 'solr app':
+        return 4;
+      case 'db':
+        return 5;
+      case 'windows client':
+        return 6;
+      case 'loadrunner controller':
+        return 7;
+      case 'loadrunner generator':
+        return 8;
+      default:
+        return 9;
+      }
+    };
+    
+    $scope.getData = function(){
+      $http({
+        url: "<%= request.getContextPath() %>/user/getBookings",
+        method: "GET",
+        params: {randnum: new Date()}
+      }).success(function(response){
+        if(response.result == true){
+          $scope.tableLines = angular.fromJson(response.message);
+        }else{
+          $.toaster({message: response.message, title: '', priority : 'danger'});
+        }
+      }).error(function(data, status){
+        showMessage("Error", "error code: " + status + "<br>" + data);
+      });
+    };
+    
+    $scope.tableCols = ["ID", "Project", "Servers/Instances", "Start Time", "End Time", "Comments"];
+    $scope.getData();
+    
+    $scope.returnServers = function(line){
+      $http({
+        url: "<%= request.getContextPath() %>/user/returnServers",
+        method: "POST",
+        params: {bookingId: line.id, randnum: new Date()},
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
+      }).success(function(response){
+        if(response.result == true){
+          $scope.getData();
+        } else {
+          $.toaster({message: response.message, title: '', priority : 'danger'});
+        }
+      }).error(function(data, status){
+        showMessage("Error", "error code: " + status + "<br>" + data);
+      });
+    };
+    
+    $scope.bookingDetailTableCols = ["ID", "Server", "Server Type", "Next User", "Next Booking Time"];
+    $scope.bookingDetailLbvipTableCols = ["ID", "URL", "IP", "Next User", "Next Booking Time"];
+    $scope.bookingDetailInstanceTableCols = ["ID", "Instance", "DB Server", "Next User", "Next Booking Time"];
+    $scope.current_booking = "";
+    $scope.extend = function(line){
+      
+      $scope.current_booking = line.id;
+      $scope.modal_current_booking_time = line.startTime + " - " + line.endTime;
+      drp.setStartDate(line.endTime);
+      drp.setEndDate(line.endTime);
+      
+      /*
+        Õâ¶Î±È½ÏÂÒ£¬ÎªÁË±£Ö¤ÏÈ»ñÈ¡server¡¢lbvip¡¢instanceµÄÊý¾Ý£¬È»ºóÉèÖÃ$scope.latestExtendTimeµÄÖµ
+        ËùÒÔ¼¸¸ö·½·¨Ç¶Ì×ÔÚÁËÒ»Æð£¬$httpÃ»ÓÐÍ¬²½·½·¨£¬$qµÄ»úÖÆÒ²²»ÐÐ£¬¿ÉÒÔ¿¼ÂÇÊÂ¼þ$on,$emit
+      */
+      
+      $scope.latestExtendTime = null;
+      function getServerInfo(){
+        $http({
+          url: "<%= request.getContextPath() %>/user/getServerNextBookingInfo",
+          method: "GET",
+          params: {bookingId: line.id, randnum: new Date()}
+        }).success(function(response){
+          if(response.result == true){
+            $scope.bookingDetailTableLines = angular.fromJson(response.message);
+            if($scope.bookingDetailTableLines.length > 0){
+              for(var i=0; i<$scope.bookingDetailTableLines.length; i++){
+                if($scope.bookingDetailTableLines[i].nextBooking == null){
+                  continue;
+                }
+                
+                if($scope.latestExtendTime == null){
+                  $scope.latestExtendTime = $scope.bookingDetailTableLines[i].nextStartTime;
+                }else if($scope.bookingDetailTableLines[i].nextStartTime < $scope.latestExtendTime){
+                  $scope.latestExtendTime = $scope.bookingDetailTableLines[i].nextStartTime;
+                }
+              }
+            }
+          }else{
+            $.toaster({message: response.message, title: '', priority : 'danger'});
+          }
+          
+          if($scope.latestExtendTime != null){
+            var date = new Date($scope.latestExtendTime);
+            date.setMinutes(date.getMinutes() - 1, date.getSeconds(), 0);
+            $scope.latestExtendTime = date.Format("yyyy-MM-dd HH:mm:ss");
+          }else{
+            $scope.latestExtendTime = "no limitation";
+          }
+          
+        }).error(function(data, status){
+          showMessage("Error", "error code: " + status + "<br>" + data);
+        });
+      }
+
+      function getLbvipInfo(){
+        $http({
+          url: "<%= request.getContextPath() %>/user/getLbvipNextBookingInfo",
+          method: "GET",
+          params: {bookingId: line.id, randnum: new Date()}
+        }).success(function(response){
+          if(response.result == true){
+            $scope.bookingDetailLbvipTableLines = angular.fromJson(response.message);
+            if($scope.bookingDetailLbvipTableLines.length > 0){
+              for(var i=0; i<$scope.bookingDetailLbvipTableLines.length; i++){
+                if($scope.bookingDetailLbvipTableLines[i].nextBooking == null){
+                  continue;
+                }
+                
+                if($scope.latestExtendTime == null){
+                  $scope.latestExtendTime = $scope.bookingDetailLbvipTableLines[i].nextStartTime;
+                }else if($scope.bookingDetailLbvipTableLines[i].nextStartTime < $scope.latestExtendTime){
+                  $scope.latestExtendTime = $scope.bookingDetailLbvipTableLines[i].nextStartTime;
+                }
+              }
+            }
+          }else{
+            $.toaster({message: response.message, title: '', priority : 'danger'});
+          }
+          
+          getServerInfo();
+          
+        }).error(function(data, status){
+          showMessage("Error", "error code: " + status + "<br>" + data);
+        });
+      }
+      
+      $http({
+        url: "<%= request.getContextPath() %>/user/getInstanceNextBookingInfo",
+        method: "GET",
+        params: {bookingId: line.id, randnum: new Date()}
+      }).success(function(response){
+        if(response.result == true){
+          $scope.bookingDetailInstanceTableLines = angular.fromJson(response.message);
+        }else{
+          $.toaster({message: response.message, title: '', priority : 'danger'});
+        }
+        
+        getLbvipInfo();
+        
+      }).error(function(data, status){
+        showMessage("Error", "error code: " + status + "<br>" + data);
+      });
+      
+      $("#extendBookingTimeModal").modal();
+    };
+    
+    $scope.submitExtend = function(){
+      $http({
+        url: "<%= request.getContextPath() %>/booking/extendBookingTime",
+        method: "POST",
+        params: {bookingId: $scope.current_booking, newEndTime: $("#daterangepicker").val(), randnum: new Date()},
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
+      }).success(function(response){
+        if(response.result == true){
+          $("#extendBookingTimeModal").modal("hide");
+          $scope.getData();
+          $.toaster({message: 'Successfully extend the server.', title: '', priority : 'success'});
+        } else {
+          $.toaster({message: response.message, title: '', priority : 'danger'});
+        }
+      }).error(function(data, status){
+        showMessage("Error", "error code: " + status + "<br>" + data);
+      });
+    };
+  });
+
+</script>
+
+</body>
+</html>

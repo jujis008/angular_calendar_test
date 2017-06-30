@@ -1,0 +1,152 @@
+<!--IE6不支持CSS的伪类,要用jQuery来处理一下-->
+<!--[if IE 6]>
+<script language="javascript" src="jquery.js"></script>
+<script language="javascript">
+$(document).ready(function(){
+    $(".form-table table tr:first-child td").css("border-top-style","none");
+    $(".form-table table tr td:first-child").css("border-left-style","none");
+});
+</script>
+<![endif]-->
+<style type="text/css">
+.form-table{
+    border-collapse:collapse;
+    border-spacing:0px;
+    border-style:solid solid solid solid;
+    border-width:1px;
+    border-color:#000000;
+}
+.form-table table{
+    border-collapse:collapse;
+    border-spacing:0px;
+}
+.form-table td{
+    margin:0px;
+    padding:0px;
+    height:25px;
+    line-height:25px;
+    text-align:center;
+    border-style:solid none none solid;
+    border-width:1px;
+    border-color:#000000;
+}
+.form-table table tr:first-child td{
+    border-top-style:none;
+}
+.form-table table tr td:first-child{
+    border-left-style:none;
+}
+</style>
+<table width="100%" class="form-table" style="background:#CFF;">
+    <thead>
+        <tr>
+          <th class="col-sm"><span ng-bind="tableCols[0]">2</span></th>
+          <th class="col-md"><span ng-bind="tableCols[1]">3</span></th>
+          <th class="col-lg"><span ng-bind="tableCols[2]">4</span></th>
+        </tr>
+  </thead>
+  <tbody>
+    <table>
+        <tr>
+            <td>
+                <table width="100%" style="background:#FFC;">
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                </table>
+            </td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        <tr>
+        </tr>
+            <td>&nbsp;</td>
+            <td>
+                <table width="100%" style="background:#CF9;">
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>
+                            <table width="100%" style="background:#FFC;">
+                                <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                </table>
+            </td>
+            <td>
+                <table width="100%" style="background:#CF9;">
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>
+                            <table width="100%" style="background:#FFC;">
+                                <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>
+                <table width="100%" style="background:#FFC;">
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+        </table>
+    </tbody>
+</table>

@@ -1,0 +1,290 @@
+<table class="table table-striped bookingRecords">
+  <thead>
+    <tr>
+      <th class="col-sm">tableCols[0]</th>
+      <th class="col-md">tableCols[1]</th>
+      <th class="col-llg">tableCols[2]</th>
+      <th class="col-lg">tableCols[3]</th>
+      <th class="col-lg">tableCols[4]</th>
+      <th class="col-llg">tableCols[5]</th>
+      <th class="col-llg">tableCols[6]</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-if="tableLines.length == 0">
+      <td colspan="6">You don't have any server now.</td>
+    </tr>
+    <tr ng-repeat="line in tableLines">
+      <td>
+        line.id
+      </td>
+      <td>
+        line.project
+      </td>
+      <td>
+        <table class="in-tbl">
+          <tr ng-repeat="serverType in line.serverTypes | orderBy: sortByServerType">
+            <td>
+              <table class="in-tbl">
+                <tr>
+                  <td class="serverType">serverType.type</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr ng-if="line.lbvips.length != 0">
+            <td>
+              <table class="in-tbl">
+                <tr>
+                  <td class="serverType">LB VIP</td>             
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr ng-if="line.instances.length != 0;">
+            <td>
+              <table class="in-tbl">
+                <tr>
+                  <td class="serverType">Instance</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </td>
+      <td>
+        <table class="in-tbl">
+          <tr ng-repeat="serverType in line.serverTypes | orderBy: sortByServerType">
+            <td>
+              <table class="in-tbl">
+                <tr>
+                  <td class="serverList">
+                    <table class="in-tbl">
+                      <tr ng-repeat="server in serverType.servers">
+                        <td>server.alias</td>
+                      </tr>
+                      <tr ng-repeat="server in serverType.servers">
+                        <td>server.alias2</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr ng-if="line.lbvips.length != 0">
+            <td>
+              <table class="in-tbl">
+                <tr>
+                  <td class="serverList">
+                    <table class="in-tbl">
+                      <tr ng-repeat="lbvip in line.lbvips">
+                        <td>lbvip.ip</td>
+                      </tr>
+                    </table>
+                  </td>
+                  
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr ng-if="line.instances.length != 0;">
+            <td>
+              <table class="in-tbl">
+                <tr>
+                  <td class="serverList">
+                    <table class="in-tbl">
+                      <tr ng-repeat="instance in line.instances">
+                        <td>instance.name</td>
+                      </tr>
+                      <tr ng-repeat="instance in line.instances">
+                        <td>instance.name2</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </td>
+      <td>
+        <table class="in-tbl">
+          <tr ng-repeat="serverType in line.serverTypes | orderBy: sortByServerType">
+            <td>
+              <table class="in-tbl">
+                <tr>
+                  <td class="serverList">
+                    <table class="in-tbl">
+                      <tr ng-repeat="server in serverType.servers">
+                        <td>server.startTime</td>
+                      </tr>
+                      <tr ng-repeat="server in serverType.servers">
+                        <td>server.startTime2</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr ng-if="line.lbvips.length != 0">
+            <td>
+              <table class="in-tbl">
+                <tr>
+                  <td class="serverList">
+                    <table class="in-tbl">
+                      <tr ng-repeat="lbvip in line.lbvips">
+                        <td>lbvip.startTime</td>
+                      </tr>
+                    </table>
+                  </td>
+                  
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr ng-if="line.instances.length != 0;">
+            <td>
+              <table class="in-tbl">
+                <tr>
+                  <td class="serverList">
+                    <table class="in-tbl">
+                      <tr ng-repeat="instance in line.instances">
+                        <td>instance.startTime</td>
+                      </tr>
+                      <tr ng-repeat="instance in line.instances">
+                        <td>instance.startTime2</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </td>
+      <td>
+        <table class="in-tbl">
+          <tr ng-repeat="serverType in line.serverTypes | orderBy: sortByServerType">
+            <td>
+              <table class="in-tbl">
+                <tr>
+                  <td class="serverList">
+                    <table class="in-tbl">
+                      <tr ng-repeat="server in serverType.servers">
+                        <td>server.endTime</td>
+                      </tr>
+                      <tr ng-repeat="server in serverType.servers">
+                        <td>server.endTime2</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr ng-if="line.lbvips.length != 0">
+            <td>
+              <table class="in-tbl">
+                <tr>
+                  <td class="serverList">
+                    <table class="in-tbl">
+                      <tr ng-repeat="lbvip in line.lbvips">
+                        <td>lbvip.endTime</td>
+                      </tr>
+                    </table>
+                  </td>
+                  
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr ng-if="line.instances.length != 0;">
+            <td>
+              <table class="in-tbl">
+                <tr>
+                  <td class="serverList">
+                    <table class="in-tbl">
+                      <tr ng-repeat="instance in line.instances">
+                        <td>instance.endTime</td>
+                      </tr>
+                      <tr ng-repeat="instance in line.instances">
+                        <td>instance.endTime2</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </td>
+      <td>
+        <table class="in-tbl">
+          <tr ng-repeat="serverType in line.serverTypes | orderBy: sortByServerType">
+            <td>
+              <table class="in-tbl">
+                <tr>
+                  <td class="serverList">
+                    <table class="in-tbl">
+                      <tr ng-repeat="server in serverType.servers">
+                        <td>server.comments</td>
+                      </tr>
+                      <tr ng-repeat="server in serverType.servers">
+                        <td>server.comments</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr ng-if="line.lbvips.length != 0">
+            <td>
+              <table class="in-tbl">
+                <tr>
+                  <td class="serverList">
+                    <table class="in-tbl">
+                      <tr ng-repeat="lbvip in line.lbvips">
+                        <td>lbvip.comments</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr ng-if="line.instances.length != 0;">
+            <td>
+              <table class="in-tbl">
+                <tr>
+                  <td class="serverList">
+                    <table class="in-tbl">
+                      <tr ng-repeat="instance in line.instances">
+                        <td>instance.comments</td>
+                      </tr>
+                      <tr ng-repeat="instance in line.instances">
+                        <td>instance.comments</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </td>
+      <td class="col-icon">
+        <button class="btn" ng-click="extend(line)">
+                <span class="glyphiconExtend
+            </button>
+            <br>
+            <br>
+            <button class="btn" ng-click="returnServers(line)">
+                <span class="glyphiconReturn
+            </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
